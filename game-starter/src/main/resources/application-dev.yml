@@ -1,0 +1,29 @@
+#启动配置
+vertx:
+  #应用信息
+  application:
+    name: appName
+  #vertx配置
+  vertxOptions:
+    #设置eventloop数量，默认是可用核心的两倍
+    eventLoopPoolSize: 20
+    #设置eventbus参数
+    eventBusOptions:
+      #连接超时时间(ms)
+      connectTimeout: 50000
+    haEnabled: true
+  deploymentOptions:
+    instances: 2
+
+testVerticle:
+  deploymentOptions:
+    instances: 1
+
+a: 111111
+b: test123
+e:
+  f:
+    g:
+      y: 1123
+
+c44: 123

@@ -1,0 +1,19 @@
+#启动配置
+vertx:
+  #激活的环境
+  profiles:
+    active: dev
+  #应用信息
+  application:
+    name: appName
+  #时区信息
+  timeZone:
+    timeOffset: 8
+  #vertx配置
+  vertxOptions:
+    #设置eventloop数量，默认是可用核心的两倍
+    eventLoopPoolSize: 20
+    #设置eventbus参数
+    eventBusOptions:
+      #连接超时时间(ms)
+      connectTimeout: 60000
