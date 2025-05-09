@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
  * @description
  **/
 @Data
-@Component
 @ConfigurationProperties(prefix = "vertx.event")
 public class ApplicationEventExecutorConfig {
 

@@ -311,6 +311,7 @@ public final class BootstrapVerticle extends BaseVerticle {
         DeliveryOptions deliveryOptions = new DeliveryOptions();
         //指定时间内没有停止完成就不等待了，继续下面的停服处理【整体固定2分钟内没有停服完成就会直接超时退出的】
         deliveryOptions.setSendTimeout(TimeUnit.SECONDS.toMillis(25));
+        deliveryOptions.setLocalOnly(true);
         TreeMap<Integer, List<BaseVerticleClassDefinition>> verticleClassTreeMap =
                 applicationContext.getVerticleClassTreeMap();
         verticleClassTreeMap.descendingMap()

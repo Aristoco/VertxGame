@@ -38,7 +38,11 @@ public class GameApplicationContextFactory {
         }
         Map<String, GameApplicationContext> applicationContextMap = GAME_APPLICATION_CONTEXT_MAP.computeIfAbsent(clazz, k -> new ConcurrentHashMap<>());
         //需要特殊处理,当不为null时后续的深度复制已存在的
-        GameApplicationContext gameApplicationContext = bootstrapApplicationContext.copy();
+        GameApplicationContext gameApplicationContext = applicationContextMap.values()
+                .stream()
+                .findFirst()
+                .orElse(bootstrapApplicationContext)
+                .copy();
         applicationContextMap.put(gameApplicationContext.getDisplayName(), gameApplicationContext);
         return (T) gameApplicationContext;
     }

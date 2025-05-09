@@ -7,16 +7,19 @@ import com.aristoco.core.event.VerticleStopEvent;
 import com.aristoco.core.utils.StringUtils;
 import com.aristoco.core.vertx.VerticleStopHandler;
 import io.vertx.core.*;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.SharedData;
 import jakarta.inject.Inject;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -72,6 +75,16 @@ public abstract class BaseVerticle extends AbstractVerticle {
      * 最终关闭操作
      */
     private VerticleStopHandler finalStopHandler;
+
+    /**
+     * 内部本地的eventbus发送配置
+     */
+    @Setter
+    public DeliveryOptions localDeliveryOptions = new DeliveryOptions()
+            //只在本地传播
+            .setLocalOnly(true)
+            //发送超时
+            .setSendTimeout(TimeUnit.SECONDS.toMillis(25));
 
     /**
      * 初始化verticle
@@ -154,7 +167,8 @@ public abstract class BaseVerticle extends AbstractVerticle {
         //关闭时会先执行由BootstrapVerticle启动的其他Verticle，最后执行BootstrapVerticle的
         if (BootstrapVerticle.class.isAssignableFrom(this.getClass())) {
             //都停服完成后，最后bootstrap开始停服
-            eventBus.publish(getStopEventBusAddr(), JsonObject.of(this.getClass().getSimpleName(), "开始停服"));
+            eventBus.publish(getStopEventBusAddr(), JsonObject.of(this.getClass().getSimpleName(),
+                    "开始停服"), localDeliveryOptions);
         } else {
             //推送停服事件给BootstrapVerticle开启对应的停服处理
             applicationContext.publishEvent(new BootstrapVerticleStopEvent());
